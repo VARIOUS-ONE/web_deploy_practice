@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ./12st/backend
+      dockerfile: Dockerfile
+    #environment:
+    #  MYENV: env1000
+    ports:
+      - 8000:8000
+    volumes:
+      #- ./db.sqlite3
+      - .:/app
+    depends_on:
+      - front
+    networks:
+      - some_net
+  #sqlite3:
+  #  image: nouchka/sqlite3:latest
+  #  stdin_open: true
+  #  tty: true
+  #  volumes:
+  #    - ./db/:/root/db/
+  front:
+    build:
+      context: ./12st/frontend
+      dockerfile: Dockerfile_react
+    volumes:
+      - ./node:/usr/src/app:cached
+    stdin_open: true
+    ports:
+      - "3000:3000"
+    networks:
+      - some_net
+      
+networks:
+    some_net:
+        driver: bridge
